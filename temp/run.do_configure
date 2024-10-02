@@ -1,0 +1,163 @@
+#!/bin/sh
+VAR_WS=`pwd`
+YOCTO_WORK=`pwd`
+EXE_PATH="/usr/bin"
+# Emit a useful diagnostic if something fails:
+bb_exit_handler() {
+    ret=$?
+    case $ret in
+    0)  ;;
+    *)  case $BASH_VERSION in
+        "") echo "WARNING: exit code $ret from a shell command.";;
+        *)  echo "WARNING: ${BASH_SOURCE[0]}:${BASH_LINENO[0]} exit $ret from '$BASH_COMMAND'";;
+        esac
+        exit $ret
+    esac
+}
+trap 'bb_exit_handler' 0
+set -e
+export AR="aarch64-poky-linux-gcc-ar"
+export AS="aarch64-poky-linux-as "
+export BUILD_AR="ar"
+export BUILD_AS="as "
+export BUILD_CC="gcc "
+export BUILD_CCLD="gcc "
+export BUILD_CFLAGS="-isystem${VAR_WS}/recipe-sysroot-native/usr/include -O2 -pipe"
+export BUILD_CPP="gcc  -E"
+export BUILD_CPPFLAGS="-isystem${VAR_WS}/recipe-sysroot-native/usr/include"
+export BUILD_CXX="g++ "
+export BUILD_CXXFLAGS="-isystem${VAR_WS}/recipe-sysroot-native/usr/include -O2 -pipe"
+export BUILD_FC="gfortran "
+export BUILD_LD="ld "
+export BUILD_LDFLAGS="-L${VAR_WS}/recipe-sysroot-native/usr/lib                         -L${VAR_WS}/recipe-sysroot-native/lib                         -Wl,--enable-new-dtags                         -Wl,-rpath-link,${VAR_WS}/recipe-sysroot-native/usr/lib                         -Wl,-rpath-link,${VAR_WS}/recipe-sysroot-native/lib                         -Wl,-rpath,${VAR_WS}/recipe-sysroot-native/usr/lib                         -Wl,-rpath,${VAR_WS}/recipe-sysroot-native/lib                         -Wl,-O1 -Wl,--allow-shlib-undefined -Wl,--dynamic-linker=${VAR_WS}/sysroots-uninative/x86_64-linux/lib/ld-linux-x86-64.so.2"
+export BUILD_NM="nm"
+export BUILD_RANLIB="ranlib"
+export BUILD_STRIP="strip"
+export CC="aarch64-poky-linux-gcc  -mtune=cortex-a55 -fstack-protector-strong  -D_FORTIFY_SOURCE=2 -Wformat -Wformat-security -Werror=format-security --sysroot=${VAR_WS}/recipe-sysroot"
+export CCLD="aarch64-poky-linux-gcc  -mtune=cortex-a55 -fstack-protector-strong  -D_FORTIFY_SOURCE=2 -Wformat -Wformat-security -Werror=format-security --sysroot=${VAR_WS}/recipe-sysroot"
+export CFLAGS=" -O2 -pipe -g -feliminate-unused-debug-types -fmacro-prefix-map=${VAR_WS}=/usr/src/debug/u-boot/1_v2021.10+git999-r0                      -fdebug-prefix-map=${VAR_WS}=/usr/src/debug/u-boot/1_v2021.10+git999-r0                      -fdebug-prefix-map=${VAR_WS}/recipe-sysroot=                      -fdebug-prefix-map=${VAR_WS}/recipe-sysroot-native= "
+export CPP="aarch64-poky-linux-gcc -E --sysroot=${VAR_WS}/recipe-sysroot  -mtune=cortex-a55 -fstack-protector-strong  -D_FORTIFY_SOURCE=2 -Wformat -Wformat-security -Werror=format-security"
+export CPPFLAGS=""
+export CXX="aarch64-poky-linux-g++  -mtune=cortex-a55 -fstack-protector-strong  -D_FORTIFY_SOURCE=2 -Wformat -Wformat-security -Werror=format-security --sysroot=${VAR_WS}/recipe-sysroot"
+export CXXFLAGS=" -O2 -pipe -g -feliminate-unused-debug-types -fmacro-prefix-map=${VAR_WS}=/usr/src/debug/u-boot/1_v2021.10+git999-r0                      -fdebug-prefix-map=${VAR_WS}=/usr/src/debug/u-boot/1_v2021.10+git999-r0                      -fdebug-prefix-map=${VAR_WS}/recipe-sysroot=                      -fdebug-prefix-map=${VAR_WS}/recipe-sysroot-native=  -fvisibility-inlines-hidden"
+unset DISTRO
+export FC="aarch64-poky-linux-gfortran  -mtune=cortex-a55 -fstack-protector-strong  -D_FORTIFY_SOURCE=2 -Wformat -Wformat-security -Werror=format-security --sysroot=${VAR_WS}/recipe-sysroot"
+export GIT_CEILING_DIRECTORIES="${VAR_WS}"
+export HOME="/home/ubuntu"
+export LC_ALL="en_US.UTF-8"
+export LD="aarch64-poky-linux-ld --sysroot=${VAR_WS}/recipe-sysroot "
+export LDFLAGS="-Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed -fstack-protector-strong -Wl,-z,relro,-z,now"
+export LOGNAME="ubuntu"
+unset MACHINE
+export MAKE="make"
+export NM="aarch64-poky-linux-nm"
+export OBJCOPY="aarch64-poky-linux-objcopy"
+export OBJDUMP="aarch64-poky-linux-objdump"
+export PATH="${EXE_PATH}:${VAR_WS}/sysroots-uninative/x86_64-linux/usr/bin:${YOCTO_WORK}/poky/scripts:${VAR_WS}/recipe-sysroot-native/usr/bin/aarch64-poky-linux:${VAR_WS}/recipe-sysroot/usr/bin/crossscripts:${VAR_WS}/recipe-sysroot-native/usr/sbin:${VAR_WS}/recipe-sysroot-native/usr/bin:${VAR_WS}/recipe-sysroot-native/sbin:${VAR_WS}/recipe-sysroot-native/bin:${YOCTO_WORK}/poky/bitbake/bin:${VAR_WS}/hosttools"
+export PERL_HASH_SEED="0"
+export PKG_CONFIG_DIR="${VAR_WS}/recipe-sysroot/usr/lib64/pkgconfig"
+export PKG_CONFIG_DISABLE_UNINSTALLED="yes"
+export PKG_CONFIG_LIBDIR="${VAR_WS}/recipe-sysroot/usr/lib64/pkgconfig"
+export PKG_CONFIG_PATH="${VAR_WS}/recipe-sysroot/usr/lib64/pkgconfig:${VAR_WS}/recipe-sysroot/usr/share/pkgconfig:${VAR_WS}/recipe-sysroot//usr/share/pkgconfig"
+export PKG_CONFIG_SYSROOT_DIR="${VAR_WS}/recipe-sysroot"
+export PKG_CONFIG_SYSTEM_INCLUDE_PATH="/usr/include"
+export PKG_CONFIG_SYSTEM_LIBRARY_PATH="/lib64:/usr/lib64"
+export PSEUDO_DISABLED="1"
+export PSEUDO_UNLOAD="1"
+export PYTHONHASHSEED="0"
+export RANLIB="aarch64-poky-linux-gcc-ranlib"
+export READELF="aarch64-poky-linux-readelf"
+unset SHELL
+export SOURCE_DATE_EPOCH="1727701872"
+export SOURCE_DATE_EPOCH_FALLBACK="1302044400"
+export STRINGS="aarch64-poky-linux-strings"
+export STRIP="aarch64-poky-linux-strip"
+unset TARGET_ARCH
+export TERM="xterm"
+export TZ="UTC"
+export USER="ubuntu"
+export base_bindir="/bin"
+export base_libdir="/lib64"
+export base_prefix=""
+export base_sbindir="/sbin"
+export bindir="/usr/bin"
+export datadir="/usr/share"
+export docdir="/usr/share/doc"
+export exec_prefix="/usr"
+export includedir="/usr/include"
+export infodir="/usr/share/info"
+export libdir="/usr/lib64"
+export libexecdir="/usr/libexec"
+export localstatedir="/var"
+export mandir="/usr/share/man"
+export nonarch_base_libdir="/lib"
+export nonarch_libdir="/usr/lib"
+export oldincludedir="/usr/include"
+export prefix="/usr"
+export sbindir="/usr/sbin"
+export servicedir="/srv"
+export sharedstatedir="/com"
+export sysconfdir="/etc"
+export systemd_system_unitdir="/lib/systemd/system"
+export systemd_unitdir="/lib/systemd"
+export systemd_user_unitdir="/usr/lib/systemd/user"
+
+do_configure() {
+    base_do_configure
+}
+
+base_do_configure() {
+	if [ -n "${VAR_WS}/configure.sstate" -a -e "${VAR_WS}/configure.sstate" ]; then
+		if [ "`cat ${VAR_WS}/configure.sstate`" != "99075c2441819b4adab65dab1d77cbfcc40b4059f27ced24ff288789991e5884" ]; then
+			cd ${VAR_WS}/u-boot-v2021.10+git999
+			if [ "0" != "1" -a \( -e Makefile -o -e makefile -o -e GNUmakefile \) ]; then
+				oe_runmake clean
+			fi
+			# -ignore_readdir_race does not work correctly with -delete;
+			# use xargs to avoid spurious build failures
+			find ${VAR_WS}/u-boot-v2021.10+git999 -ignore_readdir_race -name \*.la -type f -print0 | xargs -0 rm -f
+		fi
+	fi
+	if [ -n "${VAR_WS}/configure.sstate" ]; then
+		mkdir -p `dirname ${VAR_WS}/configure.sstate`
+		echo 99075c2441819b4adab65dab1d77cbfcc40b4059f27ced24ff288789991e5884 > ${VAR_WS}/configure.sstate
+	fi
+}
+
+oe_runmake() {
+	oe_runmake_call "$@" || die "oe_runmake failed"
+}
+
+oe_runmake_call() {
+	bbnote make CROSS_COMPILE=aarch64-poky-linux- CC="aarch64-poky-linux-gcc  --sysroot=${VAR_WS}/recipe-sysroot" V=1 HOSTCC="gcc  -isystem${VAR_WS}/recipe-sysroot-native/usr/include -O2 -pipe -L${VAR_WS}/recipe-sysroot-native/usr/lib                         -L${VAR_WS}/recipe-sysroot-native/lib                         -Wl,--enable-new-dtags                         -Wl,-rpath-link,${VAR_WS}/recipe-sysroot-native/usr/lib                         -Wl,-rpath-link,${VAR_WS}/recipe-sysroot-native/lib                         -Wl,-rpath,${VAR_WS}/recipe-sysroot-native/usr/lib                         -Wl,-rpath,${VAR_WS}/recipe-sysroot-native/lib                         -Wl,-O1 -Wl,--allow-shlib-undefined -Wl,--dynamic-linker=${VAR_WS}/sysroots-uninative/x86_64-linux/lib/ld-linux-x86-64.so.2" STAGING_INCDIR=${VAR_WS}/recipe-sysroot-native/usr/include STAGING_LIBDIR=${VAR_WS}/recipe-sysroot-native/usr/lib "$@"
+	make CROSS_COMPILE=aarch64-poky-linux- CC="aarch64-poky-linux-gcc  --sysroot=${VAR_WS}/recipe-sysroot" V=1 HOSTCC="gcc  -isystem${VAR_WS}/recipe-sysroot-native/usr/include -O2 -pipe -L${VAR_WS}/recipe-sysroot-native/usr/lib                         -L${VAR_WS}/recipe-sysroot-native/lib                         -Wl,--enable-new-dtags                         -Wl,-rpath-link,${VAR_WS}/recipe-sysroot-native/usr/lib                         -Wl,-rpath-link,${VAR_WS}/recipe-sysroot-native/lib                         -Wl,-rpath,${VAR_WS}/recipe-sysroot-native/usr/lib                         -Wl,-rpath,${VAR_WS}/recipe-sysroot-native/lib                         -Wl,-O1 -Wl,--allow-shlib-undefined -Wl,--dynamic-linker=${VAR_WS}/sysroots-uninative/x86_64-linux/lib/ld-linux-x86-64.so.2" STAGING_INCDIR=${VAR_WS}/recipe-sysroot-native/usr/include STAGING_LIBDIR=${VAR_WS}/recipe-sysroot-native/usr/lib "$@"
+}
+
+die() {
+	bbfatal_log "$*"
+}
+
+bbfatal_log() {
+	if [ -p ${VAR_WS}/temp/fifo.455066 ] ; then
+		printf "%b\0" "bbfatal_log $*" > ${VAR_WS}/temp/fifo.455066
+	else
+		echo "ERROR: $*"
+	fi
+	exit 1
+}
+
+bbnote() {
+	if [ -p ${VAR_WS}/temp/fifo.455066 ] ; then
+		printf "%b\0" "bbnote $*" > ${VAR_WS}/temp/fifo.455066
+	else
+		echo "NOTE: $*"
+	fi
+}
+
+cd "${VAR_WS}"
+do_configure
+
+# cleanup
+ret=$?
+trap '' 0
+exit $ret
