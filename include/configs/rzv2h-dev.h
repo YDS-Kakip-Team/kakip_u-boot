@@ -100,6 +100,19 @@
 	"ipaddr=192.168.1.11\0" \
 	"serverip=192.168.1.10\0" \
 	"netmask=255.255.255.0\0" \
+	"boot_fdt_overlay=no\0"	\
+	"fdt_file=kakip-es1\0"	\
+	"fdt_overlay_files=kakip-es1-spi0\0"	\
+	"fdt_addr=0x48000000\0"	\
+	"fdt_ovaddr=0x87fc0000\0"	\
+	"fdt_load=load mmc 0:2 ${fdt_addr} boot/${fdt_file}.dtb \0"	\
+	"apply_fdt_overlay=run fdt_load; "	\
+		"fdt addr ${fdt_addr}; "	\
+		"fdt resize 0x2000; "	\
+		"for overlay_file in ${fdt_overlay_files}; do "	\
+			"load mmc 0:2 ${fdt_ovaddr} boot/${overlay_file}.dtbo; "	\
+			"fdt apply ${fdt_ovaddr}; "	\
+		"done\0"	\
 	"prodsd0bootargs=setenv bootargs rw rootwait earlycon root=/dev/mmcblk0p2 \0" \
 	"prodsd1bootargs=setenv bootargs rw rootwait earlycon root=/dev/mmcblk1p2 \0" \
 	"bootimage=booti 0x48080000 - 0x48000000 \0" \
@@ -107,7 +120,10 @@
 	"ocabin=OpenCV_Bin.bin \0"  \
 	"codaddr=0xC7D00000 \0"     \
 	"codbin=Codec_Bin.bin \0"   \
-	"sd0load=ext4load mmc 0:2 ${ocaaddr} boot/${ocabin}; ext4load mmc 0:2 ${codaddr} boot/${codbin}; ext4load mmc 0:2 0x48080000 boot/Image;ext4load mmc 0:2 0x48000000 boot/kakip-es1.dtb;run prodsd0bootargs \0" \
+	"sd0load=ext4load mmc 0:2 ${ocaaddr} boot/${ocabin}; ext4load mmc 0:2 ${codaddr} boot/${codbin}; ext4load mmc 0:2 0x48080000 boot/Image;ext4load mmc 0:2 0x48000000 boot/kakip-es1.dtb;run prodsd0bootargs; " \
+		"if test ${boot_fdt_overlay} = yes; then "	\
+			"run apply_fdt_overlay; "	\
+		"fi;\0"	\
 	"sd1load=ext4load mmc 1:2 ${ocaaddr} boot/${ocabin}; ext4load mmc 1:2 ${codaddr} boot/${codbin}; ext4load mmc 1:2 0x48080000 boot/Image;ext4load mmc 1:2 0x48000000 boot/kakip-es1.dtb;run prodsd1bootargs \0" \
 	"bootcmd_check=if mmc dev 1; then run sd1load; else run sd0load; fi \0"
 #endif
