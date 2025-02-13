@@ -123,7 +123,8 @@
 	"sd0load=ext4load mmc 0:2 ${ocaaddr} boot/${ocabin}; ext4load mmc 0:2 ${codaddr} boot/${codbin}; ext4load mmc 0:2 0x48080000 boot/Image;ext4load mmc 0:2 0x48000000 boot/kakip-es1.dtb;run prodsd0bootargs; " \
 		"if test ${boot_fdt_overlay} = yes; then "	\
 			"run apply_fdt_overlay; "	\
-		"fi;\0"	\
+		"fi;"	\
+		"saveenv;\0"	\
 	"sd1load=ext4load mmc 1:2 ${ocaaddr} boot/${ocabin}; ext4load mmc 1:2 ${codaddr} boot/${codbin}; ext4load mmc 1:2 0x48080000 boot/Image;ext4load mmc 1:2 0x48000000 boot/kakip-es1.dtb;run prodsd1bootargs \0" \
 	"bootcmd_check=if mmc dev 1; then run sd1load; else run sd0load; fi \0"
 #endif
