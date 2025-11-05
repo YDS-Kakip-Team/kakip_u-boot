@@ -105,12 +105,12 @@
 	"fdt_overlay_files=kakip-es1-spi0\0"	\
 	"fdt_addr=0x48000000\0"	\
 	"fdt_ovaddr=0x87fc0000\0"	\
-	"fdt_load=load mmc 0:2 ${fdt_addr} boot/${fdt_file}.dtb \0"	\
+	"fdt_load=fatload mmc 0:1 ${fdt_addr} boot/${fdt_file}.dtb \0"	\
 	"apply_fdt_overlay=run fdt_load; "	\
 		"fdt addr ${fdt_addr}; "	\
 		"fdt resize 0x2000; "	\
 		"for overlay_file in ${fdt_overlay_files}; do "	\
-			"load mmc 0:2 ${fdt_ovaddr} boot/${overlay_file}.dtbo; "	\
+			"fatload mmc 0:1 ${fdt_ovaddr} boot/${overlay_file}.dtbo; "	\
 			"fdt apply ${fdt_ovaddr}; "	\
 		"done\0"	\
 	"prodsd0bootargs=setenv bootargs rw rootwait earlycon root=/dev/mmcblk0p2 \0" \
@@ -120,7 +120,7 @@
 	"ocabin=OpenCV_Bin.bin \0"  \
 	"codaddr=0xC7D00000 \0"     \
 	"codbin=Codec_Bin.bin \0"   \
-	"sd0load=ext4load mmc 0:2 ${ocaaddr} boot/${ocabin}; ext4load mmc 0:2 ${codaddr} boot/${codbin}; ext4load mmc 0:2 0x48080000 boot/Image;ext4load mmc 0:2 0x48000000 boot/kakip-es1.dtb;run prodsd0bootargs; " \
+	"sd0load=fatload mmc 0:1 ${ocaaddr} boot/${ocabin}; fatload mmc 0:1 ${codaddr} boot/${codbin}; fatload mmc 0:1 0x48080000 boot/Image;fatload mmc 0:1 0x48000000 boot/kakip-es1.dtb;run prodsd0bootargs; " \
 		"if test ${boot_fdt_overlay} = yes; then "	\
 			"run apply_fdt_overlay; "	\
 		"fi;"	\
