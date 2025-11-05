@@ -100,6 +100,7 @@
 	"ipaddr=192.168.1.11\0" \
 	"serverip=192.168.1.10\0" \
 	"netmask=255.255.255.0\0" \
+	"boot_from_ssd=no\0"	 \
 	"boot_fdt_overlay=no\0"	\
 	"fdt_file=kakip-es1\0"	\
 	"fdt_overlay_files=kakip-es1-spi0\0"	\
@@ -115,18 +116,21 @@
 		"done\0"	\
 	"prodsd0bootargs=setenv bootargs rw rootwait earlycon root=/dev/mmcblk0p2 \0" \
 	"prodsd1bootargs=setenv bootargs rw rootwait earlycon root=/dev/mmcblk1p2 \0" \
+	"prodnvmebootargs=setenv bootargs rw rootwait earlycon root=/dev/nvme0n1p1 \0" \
 	"bootimage=booti 0x48080000 - 0x48000000 \0" \
 	"ocaaddr=0xC0000000 \0"     \
 	"ocabin=OpenCV_Bin.bin \0"  \
 	"codaddr=0xC7D00000 \0"     \
 	"codbin=Codec_Bin.bin \0"   \
-	"sd0load=fatload mmc 0:1 ${ocaaddr} boot/${ocabin}; fatload mmc 0:1 ${codaddr} boot/${codbin}; fatload mmc 0:1 0x48080000 boot/Image;fatload mmc 0:1 0x48000000 boot/kakip-es1.dtb;run prodsd0bootargs; " \
-		"if test ${boot_fdt_overlay} = yes; then "	\
-			"run apply_fdt_overlay; "	\
-		"fi;"	\
-		"saveenv;\0"	\
+	"fdt_overlay_load_check=if test ${boot_fdt_overlay} = yes; then run apply_fdt_overlay; fi; saveenv\0"	\
+	"sd0load=fatload mmc 0:1 ${ocaaddr} boot/${ocabin}; fatload mmc 0:1 ${codaddr} boot/${codbin}; fatload mmc 0:1 0x48080000 boot/Image;fatload mmc 0:1 0x48000000 boot/kakip-es1.dtb;run prodsd0bootargs; run fdt_overlay_load_check\0"	\
 	"sd1load=ext4load mmc 1:2 ${ocaaddr} boot/${ocabin}; ext4load mmc 1:2 ${codaddr} boot/${codbin}; ext4load mmc 1:2 0x48080000 boot/Image;ext4load mmc 1:2 0x48000000 boot/kakip-es1.dtb;run prodsd1bootargs \0" \
-	"bootcmd_check=if mmc dev 1; then run sd1load; else run sd0load; fi \0"
+	"nvmeload=fatload mmc 0:1 ${ocaaddr} boot/${ocabin}; fatload mmc 0:1 ${codaddr} boot/${codbin}; fatload mmc 0:1 0x48080000 boot/Image;fatload mmc 0:1 0x48000000 boot/kakip-es1.dtb;run prodnvmebootargs; run fdt_overlay_load_check\0"	\
+	"bootcmd_check=if test ${boot_from_ssd} = yes; then "	\
+			"run nvmeload; "	\
+		"else "	\
+			"if mmc dev 1; then run sd1load; else run sd0load; fi; "	\
+		"fi \0"
 #endif
 
 #define CONFIG_BOOTCOMMAND	"run bootcmd_check;run bootimage"
